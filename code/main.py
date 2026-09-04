@@ -1,5 +1,6 @@
 from setting import *
 from player import *
+from sprites import *
 from groups import *
 
 class Game:
@@ -13,9 +14,13 @@ class Game:
 
         # groups
         self.all_sprites = AllSprites()
+        self.collision = pygame.sprite.Group()
 
         # sprite
-        self.playey = Player((WINDOW_WIDTH / 2,WINDOW_HEIGHT / 2), self.all_sprites)
+        self.test_object = pygame.Surface((50, 50))
+        self.test_object.fill("black")
+        self.test = CollisionSprite((500, 600), self.test_object, (self.all_sprites, self.collision))
+        self.player = Player((WINDOW_WIDTH / 2,WINDOW_HEIGHT / 2), self.all_sprites, self.collision)
 
     def setup(self):
         pass
@@ -23,7 +28,7 @@ class Game:
     def run(self):
         while self.running:
             # dt
-            dt = self.clock.tick(FPS)
+            dt = self.clock.tick(FPS) / 1000
 
             # event loop
             for event in pygame.event.get():
@@ -31,7 +36,8 @@ class Game:
                     self.running = False
             
             # update
-            
+            self.all_sprites.update(dt)
+
             # draw
             self.display_surface.fill("#676767")
             self.all_sprites.draw(self.display_surface)
