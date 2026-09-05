@@ -88,29 +88,3 @@ target/
 
 # Virtual environment
 .venv/
-
-
-#freebuff
-.freebuff
-
-
-# Nova's conversations and long-term memory (personal data, keep out of git)
-data/
-
-# Nova data snapshots (backup_data.py) — also personal data
-backups/
-
-# The user's first project (Yui) — a local copy placed here as reference.
-# Contains private data (yui_memory/), so it stays out of git entirely.
-fine-tune/output/
-models/
-.hf-cache/
-README_PERSONAL.md
-.venv-train/
-.unsloth/
-unsloth_compiled_cache/
-
-# Personal docs — for Ohm only, not the public repo.
-NOVA_BUILD_GUIDE.md
-NOVA_BUILD_GUIDE.pdf
-make_guide_pdf.py
