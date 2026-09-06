@@ -16,6 +16,7 @@ class Game:
         # groups
         self.all_sprites = AllSprites()
         self.collision_sprites = pygame.sprite.Group()
+        self.notcollision_sprites = pygame.sprite.Group()
 
         self.setup()
 
@@ -25,13 +26,16 @@ class Game:
         map = load_pygame(join("data", "maps", "world.tmx"))
 
         for x, y ,image in map.get_layer_by_name("Ground").tiles():
-            Sprite((x * TILE_SIZE, y * TILE_SIZE), image, self.all_sprites)
+            GroundSprite((x * TILE_SIZE, y * TILE_SIZE), image, self.all_sprites)
 
         for obj in map.get_layer_by_name("Objects"):
-            CollisionSprite((obj.x, obj.y), obj.image, (self.all_sprites, self.collision_sprites))
+            if obj.name == "tree":
+                TreeSprite((obj.x, obj.y), obj.image, (self.all_sprites, self.notcollision_sprites))
+            else:
+                CollisionSprite((obj.x, obj.y), obj.image, (self.all_sprites, self.collision_sprites))
 
         for obj in map.get_layer_by_name("Collisions"):
-            CollisionSprite((obj.x, obj.y), pygame.Surface((obj.width, obj.height)), self.collision_sprites)
+            GroundSprite((obj.x, obj.y), pygame.Surface((obj.width, obj.height)), self.collision_sprites)
 
         for obj in map.get_layer_by_name("Entities"):
             if obj.name == "Player":

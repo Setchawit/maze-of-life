@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.collision_hitbox_rect = self.rect.inflate(-60, -90)
 
         # set up
-        self.speed = 300
+        self.speed = 670
         self.direction = pygame.math.Vector2()
         self.collision_sprites = collision_sprites
 
@@ -25,13 +25,15 @@ class Player(pygame.sprite.Sprite):
         self.direction.x = int(keys[pygame.K_RIGHT] or keys[pygame.K_d]) - int(keys[pygame.K_LEFT] or keys[pygame.K_a])
 
         self.direction = (self.direction.normalize() if self.direction else self.direction) # speed normalization
+
         
     def move(self, dt):
-        self.collision_hitbox_rect.y += self.direction.y * self.speed * dt
-        self.collision("vertical")
         self.collision_hitbox_rect.x += self.direction.x * self.speed * dt
         self.collision("horizontal")
+        self.collision_hitbox_rect.y += self.direction.y * self.speed * dt
+        self.collision("vertical")
         self.rect.center = self.collision_hitbox_rect.center
+
 
     def load_images(self):
         self.frames = {"down" : [], "left" : [], "right" : [], "up" : []}
@@ -45,13 +47,16 @@ class Player(pygame.sprite.Sprite):
 
     def collision(self, direction):
         for sprite in self.collision_sprites:
-            if sprite.rect.colliderect(self.collision_hitbox_rect):
-                if direction == "vertical": 
-                    if self.direction.y < 0 : self.collision_hitbox_rect.top = sprite.rect.bottom
-                    if self.direction.y > 0 : self.collision_hitbox_rect.bottom = sprite.rect.top
-                else:
-                    if self.direction.x > 0 : self.collision_hitbox_rect.right = sprite.rect.left
-                    if self.direction.x < 0 : self.collision_hitbox_rect.left = sprite.rect.right
+                if sprite.rect.colliderect(self.collision_hitbox_rect):
+                    if direction == "vertical":
+                        if self.direction.y < 0 : 
+                            self.collision_hitbox_rect.top = sprite.rect.bottom
+                        if self.direction.y > 0 : 
+                            self.collision_hitbox_rect.bottom = sprite.rect.top
+                    else:
+                        if self.direction.x > 0 : self.collision_hitbox_rect.right = sprite.rect.left
+                        if self.direction.x < 0 : self.collision_hitbox_rect.left = sprite.rect.right
+
 
     def animate(self, dt):
         # get state
