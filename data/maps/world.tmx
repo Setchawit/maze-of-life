@@ -105,19 +105,19 @@
   <object id="38" name="Player" x="1597.69" y="1538.91">
    <point/>
   </object>
-  <object id="39" name="Enemy" x="2804.37" y="913.334">
+  <object id="39" name="Enemy" x="3128.37" y="1637.33">
    <point/>
   </object>
-  <object id="40" name="Enemy" x="1993.33" y="967.515">
+  <object id="40" name="Enemy" x="141.33" y="1447.51">
    <point/>
   </object>
-  <object id="41" name="Trap" x="2622.67" y="557.822">
+  <object id="41" name="kill" x="2622.67" y="557.822">
    <point/>
   </object>
-  <object id="45" name="Enemy" x="607.758" y="553.94">
+  <object id="45" name="Enemy" x="1727.76" y="253.94">
    <point/>
   </object>
-  <object id="48" name="Trap" x="671.319" y="1112.34">
+  <object id="48" name="kill" x="671.319" y="1112.34">
    <point/>
   </object>
   <object id="52" name="Warp" x="1207.39" y="2232.24">
@@ -126,28 +126,28 @@
   <object id="54" name="Warp" x="2750.55" y="2696.85">
    <point/>
   </object>
-  <object id="58" name="Trap" x="1442.18" y="2266.43">
+  <object id="58" name="kill" x="1442.18" y="2266.43">
    <point/>
   </object>
-  <object id="63" name="Enemy" x="849.939" y="2542.06">
+  <object id="63" name="Enemy" x="145.939" y="1618.06">
    <point/>
   </object>
   <object id="64" name="Warp" x="1985.33" y="2571.52">
    <point/>
   </object>
-  <object id="66" name="Enemy" x="2755.52" y="2238.42">
+  <object id="66" name="Enemy" x="3171.52" y="2906.42">
    <point/>
   </object>
-  <object id="68" name="Enemy" x="2065.46" y="1326.3">
+  <object id="68" name="Enemy" x="133.46" y="2902.3">
    <point/>
   </object>
-  <object id="69" name="Enemy" x="1170.06" y="1695.15">
+  <object id="69" name="Enemy" x="122.06" y="423.15">
    <point/>
   </object>
-  <object id="70" name="Trap" x="799.455" y="2068.49">
+  <object id="70" name="kill" x="799.455" y="2068.49">
    <point/>
   </object>
-  <object id="71" name="Enemy" x="1506.55" y="493.818">
+  <object id="71" name="Enemy" x="3142.55" y="281.818">
    <point/>
   </object>
   <object id="179" name="Warp" x="2890.91" y="454.545">
@@ -156,7 +156,7 @@
   <object id="180" name="Goal" x="445.455" y="457.576">
    <point/>
   </object>
-  <object id="237" name="Enemy" x="2548.48" y="2709.09">
+  <object id="237" name="Enemy" x="136.48" y="3045.09">
    <point/>
   </object>
  </objectgroup>
@@ -278,7 +278,7 @@
   <object id="325" x="2114.17" y="2263" width="63.667" height="40"/>
   <object id="326" x="2236.17" y="2328" width="63.667" height="40"/>
   <object id="327" x="2304.17" y="2584" width="110" height="40"/>
-  <object id="328" x="1855.17" y="2645" width="63.667" height="40"/>
+  <object id="328" x="1753.84" y="2645" width="165" height="40"/>
   <object id="329" x="1408.67" y="2327" width="316.167" height="40"/>
   <object id="330" x="2560.17" y="1812.5" width="63.667" height="40"/>
   <object id="331" x="2300.67" y="1940" width="63.667" height="40"/>
