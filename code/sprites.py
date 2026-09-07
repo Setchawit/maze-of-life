@@ -23,8 +23,27 @@ class TreeSprite(pygame.sprite.Sprite):
         self.rect = self.image.get_frect(topleft=pos)
 
 
+class Text(pygame.sprite.Sprite):
+    def __init__(self, font, player, score, groups):
+        # player connection
+        self.player = player
+        self.distance = 100
+        self.player_direction = pygame.Vector2(0, -1)
+
+        # Sprite setup
+        super(). __init__(groups)
+        self.font = font
+        self.score = score
+        self.image = self.font.render(f"Goal Reached: {self.score}", True, 20)
+        self.rect = self.image.get_frect(center = self.player.rect.center + self.player_direction * self.distance)
+
+    def update(self, _):
+        self.rect.center = self.player.rect.center + self.player_direction * self.distance
+        self.image = self.font.render(f"Goal Reached: {self.score}", True, 20)
+
+
 class Curser(pygame.sprite.Sprite):
-    def __init__(self, player, groups, show):
+    def __init__(self, surf, player, groups):
         # player connection
         self.player = player
         self.distance = 100
@@ -34,7 +53,7 @@ class Curser(pygame.sprite.Sprite):
 
         # Sprite setup
         super(). __init__(groups)
-        self.image = pygame.image.load(join("images", "tools", "curser", "curser.png")).convert_alpha()
+        self.image = surf
         self.curser_surf = self.image
         self.rect = self.image.get_frect(center = self.player.rect.center + self.player_direction * self.distance)
 
