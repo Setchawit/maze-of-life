@@ -29,7 +29,7 @@ class Game:
         # weapon
         self.weapon_show_time = 0
         self.weapon_show = False
-        self.weapon_cooldown = 1000
+        self.weapon_cooldown = 1
 
         # curser
         self.curser_show = True
