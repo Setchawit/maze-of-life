@@ -57,34 +57,34 @@ class Game:
         self.setup()
 
     def load_images(self):
-        self.curser_surf = pygame.image.load(join("images", "tools", "curser", "curser.png")).convert_alpha()
-        self.sword_surf = pygame.image.load(join("images", "tools", "weapon", "sword.png")).convert_alpha()
-        self.item_frames = [pygame.image.load(join("images", "kill", f"{i}.png")).convert_alpha() for i in range(23)]
-        self.warp_frames = [pygame.image.load(join("images", "warp", f"{i}.png")).convert_alpha() for i in range(23)]
-        self.win_frames = [pygame.image.load(join("images", "win", f"{i}.png")).convert_alpha() for i in range(23)]
-        self.font = pygame.font.Font(join("images", "text", "ComicNeueSansID.ttf"), 20)
+        self.curser_surf = pygame.image.load(resource_path(join("images", "tools", "curser", "curser.png"))).convert_alpha()
+        self.sword_surf = pygame.image.load(resource_path(join("images", "tools", "weapon", "sword.png"))).convert_alpha()
+        self.item_frames = [pygame.image.load(resource_path(join("images", "kill", f"{i}.png"))).convert_alpha() for i in range(23)]
+        self.warp_frames = [pygame.image.load(resource_path(join("images", "warp", f"{i}.png"))).convert_alpha() for i in range(23)]
+        self.win_frames = [pygame.image.load(resource_path(join("images", "win", f"{i}.png"))).convert_alpha() for i in range(23)]
+        self.font = pygame.font.Font(resource_path(join("images", "text", "ComicNeueSansID.ttf")), 20)
 
-        folders = list(walk(join("images", "enemies")))[0][1]
+        folders = list(walk(resource_path(join("images", "enemies"))))[0][1]
         self.enemy_frames = {}
         for folder in folders:
-            for folder_path, _, file_names in walk(join("images", "enemies", folder)):
+            for folder_path, _, file_names in walk(resource_path(join("images", "enemies", folder))):
                 self.enemy_frames[folder] = []
                 for file_name in sorted(file_names, key=lambda name: int(name.split(".")[0])):
-                    full_path = join(folder_path, file_name)
+                    full_path = resource_path(join(folder_path, file_name))
                     surf = pygame.image.load(full_path).convert_alpha()
                     self.enemy_frames[folder].append(surf)
 
     def load_musics(self):
-        self.game_music = pygame.mixer.Sound(join("audio", "music.wav"))
+        self.game_music = pygame.mixer.Sound(resource_path(join("audio", "music.wav")))
         self.game_music.set_volume(0.2)
         self.game_music.play(loops=-1)
-        self.damage_sound = pygame.mixer.Sound(join("audio", "damage.ogg"))
+        self.damage_sound = pygame.mixer.Sound(resource_path(join("audio", "damage.ogg")))
         self.damage_sound.set_volume(0.15)
-        self.hit_sound = pygame.mixer.Sound(join("audio", "impact.ogg"))
+        self.hit_sound = pygame.mixer.Sound(resource_path(join("audio", "impact.ogg")))
         self.hit_sound.set_volume(0.15)
-        self.win_sound = pygame.mixer.Sound(join("audio", "win.wav"))
+        self.win_sound = pygame.mixer.Sound(resource_path(join("audio", "win.wav")))
         self.win_sound.set_volume(0.5)
-        self.warp_sound = pygame.mixer.Sound(join("audio", "warp.wav"))
+        self.warp_sound = pygame.mixer.Sound(resource_path(join("audio", "warp.wav")))
         self.warp_sound.set_volume(0.25)
 
     def load_texts(self):
@@ -118,7 +118,7 @@ class Game:
                 self.curser_show = True
 
     def reload_game(self):
-        map = load_pygame(join("data", "maps", "world.tmx"))
+        map = load_pygame(resource_path(join("data", "maps", "world.tmx")))
         for obj in map.get_layer_by_name("Entities"):
             if obj.name == "kill" and self.current_item == 0:
                 self.item = Items((obj.x, obj.y), self.item_frames, (self.all_sprites, self.item_sprites))
@@ -126,7 +126,7 @@ class Game:
             enemy.kill()
 
     def setup(self):
-        map = load_pygame(join("data", "maps", "world.tmx"))
+        map = load_pygame(resource_path(join("data", "maps", "world.tmx")))
 
         for x, y ,image in map.get_layer_by_name("Ground").tiles():
             GroundSprite((x * TILE_SIZE, y * TILE_SIZE), image, self.all_sprites)

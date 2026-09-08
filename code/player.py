@@ -10,7 +10,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(groups)
         self.load_images()
         self.state, self.frames_index = "down", 0
-        self.image = pygame.image.load(join("images", "player", "down", "0.png")).convert_alpha()
+        self.image = pygame.image.load((resource_path(join("images", "player", "down", "0.png")))).convert_alpha()
         self.rect = self.image.get_frect(center=pos)
         self.collision_hitbox_rect = self.rect.inflate(-60, -90)
 
@@ -39,7 +39,7 @@ class Player(pygame.sprite.Sprite):
         self.frames = {"down" : [], "left" : [], "right" : [], "up" : []}
 
         for state in self.frames.keys():
-                for folder_path, sub_folders, file_names in walk(join("images", "player", state)):
+                for folder_path, sub_folders, file_names in walk(resource_path(join("images", "player", state))):
                     for file_name in sorted(file_names, key=lambda name: int(name.split(".")[0])): # sort proof
                         full_path = join(folder_path, file_name)
                         load_frames = pygame.image.load(full_path).convert_alpha()
@@ -67,7 +67,7 @@ class Player(pygame.sprite.Sprite):
 
         # animate
         self.frames_index = self.frames_index + 5 * dt if self.direction else 0
-        self.image = self.frames[self.state][int(self.frames_index) % len(self.frames[self.state])]
+        self.image = self.frames[self.state][int(self.frames_index) % len(self.frames[self.state])] 
 
     def update(self, dt):
         self.input()
