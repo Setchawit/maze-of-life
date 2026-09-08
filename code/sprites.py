@@ -115,7 +115,7 @@ class Weapon(pygame.sprite.Sprite):
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, pos, frames, groups, player, kill = False):
+    def __init__(self, pos, frames, groups, player):
         super().__init__(groups)
         self.player = player
         self.frames, self.frames_index = frames, 0
@@ -147,14 +147,17 @@ class Enemy(pygame.sprite.Sprite):
 
 
 class Items(pygame.sprite.Sprite):
-    def __init__(self, pos, surf, groups):
+    def __init__(self, pos, frames, groups):
         super().__init__(groups)
-        self.image = surf
-        self.rect = self.image.get_frect(center = pos)
+        self.frames = frames
+        self.frames_index = 0
+        self.image = self.frames[self.frames_index]
+        self.animation_speed = 12
+        self.rect = self.image.get_frect(center=pos)
 
+    def animate(self, dt):
+        self.frames_index += self.animation_speed * dt
+        self.image = self.frames[int(self.frames_index) % len(self.frames)]
 
-class Warp(pygame.sprite.Sprite):
-    def __init__(self, pos, surf, groups):
-        super().__init__(groups)
-        self.image = surf
-        self.rect = self.image.get_frect(center = pos)
+    def update(self, dt):
+        self.animate(dt)

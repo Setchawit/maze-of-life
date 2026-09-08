@@ -46,6 +46,9 @@ class Game:
         self.warp_cooldown = 5000
         self.warp_time = 0
 
+        # item
+        self.current_item = 4
+
         # text
         self.stop = False
 
@@ -53,13 +56,12 @@ class Game:
         self.load_musics()
         self.setup()
 
-        # sprite
-
     def load_images(self):
         self.curser_surf = pygame.image.load(join("images", "tools", "curser", "curser.png")).convert_alpha()
         self.sword_surf = pygame.image.load(join("images", "tools", "weapon", "sword.png")).convert_alpha()
-        self.item_surf = pygame.Surface((50, 50))
-        self.item_surf.fill("black")
+        self.item_frames = [pygame.image.load(join("images", "kill", f"{i}.png")).convert_alpha() for i in range(23)]
+        self.warp_frames = [pygame.image.load(join("images", "warp", f"{i}.png")).convert_alpha() for i in range(23)]
+        self.win_frames = [pygame.image.load(join("images", "win", f"{i}.png")).convert_alpha() for i in range(23)]
         self.font = pygame.font.Font(join("images", "text", "ComicNeueSansID.ttf"), 20)
 
         folders = list(walk(join("images", "enemies")))[0][1]
@@ -74,12 +76,16 @@ class Game:
 
     def load_musics(self):
         self.game_music = pygame.mixer.Sound(join("audio", "music.wav"))
-        self.game_music.set_volume(0.05)
+        self.game_music.set_volume(0.2)
         self.game_music.play(loops=-1)
         self.damage_sound = pygame.mixer.Sound(join("audio", "damage.ogg"))
-        self.damage_sound.set_volume(0.1)
+        self.damage_sound.set_volume(0.15)
         self.hit_sound = pygame.mixer.Sound(join("audio", "impact.ogg"))
-        self.hit_sound.set_volume(0.1)
+        self.hit_sound.set_volume(0.15)
+        self.win_sound = pygame.mixer.Sound(join("audio", "win.wav"))
+        self.win_sound.set_volume(0.5)
+        self.warp_sound = pygame.mixer.Sound(join("audio", "warp.wav"))
+        self.warp_sound.set_volume(0.25)
 
     def load_texts(self):
         if self.goal_reached == 1 and not self.stop:
@@ -114,8 +120,8 @@ class Game:
     def reload_game(self):
         map = load_pygame(join("data", "maps", "world.tmx"))
         for obj in map.get_layer_by_name("Entities"):
-            if obj.name == "kill":
-                self.item = Items((obj.x, obj.y), self.item_surf, (self.all_sprites, self.item_sprites))
+            if obj.name == "kill" and self.current_item == 0:
+                self.item = Items((obj.x, obj.y), self.item_frames, (self.all_sprites, self.item_sprites))
         for enemy in self.enemy_sprites:
             enemy.kill()
 
@@ -142,18 +148,18 @@ class Game:
             if obj.name == "Enemy":
                 self.spawn_positions.append((obj.x, obj.y))
             if obj.name == "kill":
-                self.item = Items((obj.x, obj.y), self.item_surf, (self.all_sprites, self.item_sprites))
+                self.item = Items((obj.x, obj.y), self.item_frames, (self.all_sprites, self.item_sprites))
             if obj.name == "Goal":
-                self.goal = Items((obj.x, obj.y), self.item_surf, (self.all_sprites, self.warp_sprites))
+                self.goal = Items((obj.x, obj.y), self.win_frames, (self.all_sprites, self.warp_sprites))
 
             if obj.name == "Warp1":
-                self.warp1 = Warp((obj.x, obj.y), self.item_surf, (self.all_sprites, self.warp_sprites))
+                self.warp1 = Items((obj.x, obj.y), self.warp_frames, (self.all_sprites, self.warp_sprites))
             if obj.name == "Warp2":
-                self.warp2 = Warp((obj.x, obj.y), self.item_surf, (self.all_sprites, self.warp_sprites))
+                self.warp2 = Items((obj.x, obj.y), self.warp_frames, (self.all_sprites, self.warp_sprites))
             if obj.name == "Warp3":
-                self.warp3 = Warp((obj.x, obj.y), self.item_surf, (self.all_sprites, self.warp_sprites))
+                self.warp3 = Items((obj.x, obj.y), self.warp_frames, (self.all_sprites, self.warp_sprites))
             if obj.name == "Warp4":
-                self.warp4 = Warp((obj.x, obj.y), self.item_surf, (self.all_sprites, self.warp_sprites))
+                self.warp4 = Items((obj.x, obj.y), self.warp_frames, (self.all_sprites, self.warp_sprites))
 
             if obj.name == "Warp1e":
                 self.warp1e_x = obj.x
@@ -171,6 +177,7 @@ class Game:
     def enemy_collision(self):
         for player in self.player_sprite:
             if pygame.sprite.spritecollide(player, self.enemy_sprites, False, pygame.sprite.collide_mask):
+                self.damage_sound.play()
                 self.player.collision_hitbox_rect.x = self.start_point_x
                 self.player.collision_hitbox_rect.y = self.start_point_y
                 self.goal_reached = 0
@@ -184,6 +191,7 @@ class Game:
     def item_collision(self):
         for player in self.player_sprite:
             if pygame.sprite.spritecollide(player, self.item_sprites, True):
+               self.current_item -= 1
                for enemy in self.enemy_sprites:
                    self.hit_sound.play()
                    enemy.kill()
@@ -191,27 +199,32 @@ class Game:
     def warp_collision(self):
         if pygame.time.get_ticks() - self.warp_time >= self.warp_cooldown:
             if pygame.sprite.collide_rect(self.player, self.warp1):
+                self.warp_sound.play()
                 self.player.collision_hitbox_rect.x = self.warp1e_x
                 self.player.collision_hitbox_rect.y = self.warp1e_y
                 self.warp_time = pygame.time.get_ticks()
 
             if pygame.sprite.collide_rect(self.player, self.warp2):
+                self.warp_sound.play()
                 self.player.collision_hitbox_rect.x = self.warp2e_x
                 self.player.collision_hitbox_rect.y = self.warp2e_y
                 self.warp_time = pygame.time.get_ticks()
 
             if pygame.sprite.collide_rect(self.player, self.warp3):
+                self.warp_sound.play()
                 self.player.collision_hitbox_rect.x = self.warp3e_x
                 self.player.collision_hitbox_rect.y = self.warp3e_y
                 self.warp_time = pygame.time.get_ticks()
 
             if pygame.sprite.collide_rect(self.player, self.warp4):
+                self.warp_sound.play()
                 self.player.collision_hitbox_rect.x = self.warp4e_x
                 self.player.collision_hitbox_rect.y = self.warp4e_y
                 self.warp_time = pygame.time.get_ticks()
 
     def goal_collision(self):
             if pygame.sprite.collide_rect(self.player, self.goal):
+                self.win_sound.play()
                 self.player.collision_hitbox_rect.x = self.start_point_x
                 self.player.collision_hitbox_rect.y = self.start_point_y
                 self.goal_reached += 1
